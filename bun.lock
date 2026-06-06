@@ -4,6 +4,9 @@
   "workspaces": {
     "": {
       "name": "dragoncode",
+      "devDependencies": {
+        "@types/react": "^19.2.17",
+      },
     },
     "packages/cli": {
       "name": "@dragoncode/cli",
