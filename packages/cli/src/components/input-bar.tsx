@@ -159,7 +159,7 @@ export default function InputBar({ onSubmit, disabled }: Props) {
                     ref={textareaRef}
                     keyBindings={TEXTAREA_KEYS_BINDINGS}
                     onContentChange={handleTextareaContentChange}
-                    focused={!disabled}
+                    focused={!disabled && (isTopLayer("base") || isTopLayer("command"))}
                     placeholder={`Ask anything.. "Fix a bug in my code", "Write a function that does X"`}
                     wrapMode="word"
                 />
