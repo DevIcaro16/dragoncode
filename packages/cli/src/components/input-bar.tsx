@@ -2,11 +2,12 @@ import type { KeyBinding, TextareaRenderable } from "@opentui/core";
 import { EmptyBorder } from "./border";
 import StatusBar from "./status-bar";
 import { CommandMenu } from "./command-menu";
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useRenderer } from "@opentui/react";
 import { resolve } from "bun";
 import useCommandMenu from "./command-menu/use-command-menu";
 import type { Command } from "./command-menu/types";
+import { useKeyboardLayer } from "../providers/keyboard-layer";
 import { useToast } from "../providers/toast";
 
 type Props = {
@@ -26,6 +27,7 @@ export default function InputBar({ onSubmit, disabled }: Props) {
     const textareaRef = React.useRef<TextareaRenderable>(null);
     const onSubmitRef = React.useRef<() => void>(() => { });
     const renderer = useRenderer();
+    const { isTopLayer, setResponder } = useKeyboardLayer();
     const toast = useToast();
 
     const {
@@ -101,6 +103,22 @@ export default function InputBar({ onSubmit, disabled }: Props) {
         handleSubmit();
     }
 
+
+    useEffect(() => {
+        setResponder("base", () => {
+            if (disabled) return false;
+            const textarea = textareaRef.current;
+            if (textarea && textarea.plainText.length > 0) {
+                textarea.setText("");
+                return true
+            }
+            return false;
+        });
+
+        return () => setResponder("base", null);
+
+    }, [disabled, setResponder]);
+
     return (
         <box width="100%" alignItems="center">
             <box
@@ -141,7 +159,7 @@ export default function InputBar({ onSubmit, disabled }: Props) {
                     ref={textareaRef}
                     keyBindings={TEXTAREA_KEYS_BINDINGS}
                     onContentChange={handleTextareaContentChange}
-                    focused={!disabled}
+                    focused={!disabled && (isTopLayer("base") || isTopLayer("command"))}
                     placeholder={`Ask anything.. "Fix a bug in my code", "Write a function that does X"`}
                     wrapMode="word"
                 />
