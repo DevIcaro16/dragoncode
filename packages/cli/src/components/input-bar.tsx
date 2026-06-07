@@ -8,6 +8,7 @@ import { resolve } from "bun";
 import useCommandMenu from "./command-menu/use-command-menu";
 import type { Command } from "./command-menu/types";
 import { useKeyboardLayer } from "../providers/keyboard-layer";
+import { useToast } from "../providers/toast";
 
 type Props = {
     onSubmit: (value: string) => void;
@@ -27,6 +28,7 @@ export default function InputBar({ onSubmit, disabled }: Props) {
     const onSubmitRef = React.useRef<() => void>(() => { });
     const renderer = useRenderer();
     const { isTopLayer, setResponder } = useKeyboardLayer();
+    const toast = useToast();
 
     const {
         showCommandMenu,
@@ -56,7 +58,8 @@ export default function InputBar({ onSubmit, disabled }: Props) {
         textarea.setText("");
         if (command.action) {
             command.action({
-                exit: () => renderer.destroy()
+                exit: () => renderer.destroy(),
+                toast
             });
         } else {
             textarea.insertText(command.value + " ");
@@ -157,7 +160,7 @@ export default function InputBar({ onSubmit, disabled }: Props) {
                     keyBindings={TEXTAREA_KEYS_BINDINGS}
                     onContentChange={handleTextareaContentChange}
                     focused={!disabled}
-                    placeholder={`Ask anything... "Fix a bug in my code", "Write a function that does X"`}
+                    placeholder={`Ask anything.. "Fix a bug in my code", "Write a function that does X"`}
                     wrapMode="word"
                 />
                 <StatusBar />
