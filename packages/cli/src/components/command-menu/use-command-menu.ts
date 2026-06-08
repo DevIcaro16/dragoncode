@@ -28,6 +28,11 @@ export default function useCommandMenu(): UseCommandMenuReturn {
 
     const filteredCommands = React.useMemo(() => getFilteredCommands(commandQuery), [commandQuery]);
 
+    const close = () => {
+        setShowCommandMenu(false);
+        pop("command");
+    };
+
     const handleContentChange = (text: string) => {
         setTextValue(text);
         setSelectedIndex(0);
@@ -39,13 +44,11 @@ export default function useCommandMenu(): UseCommandMenuReturn {
         if (prefix !== null && !prefix.includes(" ")) {
             setShowCommandMenu(true);
             push("command", () => {
-                setShowCommandMenu(false);
-                pop("command");
+                close();
                 return true
             });
         } else {
-            setShowCommandMenu(false);
-            pop("command");
+            close();
         }
     };
 
@@ -53,8 +56,7 @@ export default function useCommandMenu(): UseCommandMenuReturn {
         const cmd = filteredCommands[index];
         if (cmd) {
             setTextValue("");
-            setShowCommandMenu(false);
-            pop("command");
+            close();
         }
         return cmd;
     }
@@ -65,8 +67,7 @@ export default function useCommandMenu(): UseCommandMenuReturn {
 
         if (key.name === "escape") {
             key.preventDefault();
-            setShowCommandMenu(false);
-            pop("command");
+            close();
         } else if (key.name === "up") {
             key.preventDefault();
             setSelectedIndex((i: number) => {
