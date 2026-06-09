@@ -10,6 +10,7 @@ import type { Command } from "./command-menu/types";
 import { useKeyboardLayer } from "../providers/keyboard-layer";
 import { useToast } from "../providers/toast";
 import { useDialog } from "../providers/dialog";
+import { useTheme } from "../providers/theme";
 
 type Props = {
     onSubmit: (value: string) => void;
@@ -31,6 +32,7 @@ export default function InputBar({ onSubmit, disabled }: Props) {
     const { isTopLayer, setResponder } = useKeyboardLayer();
     const dialog = useDialog();
     const toast = useToast();
+    const { colors } = useTheme();
 
     const {
         showCommandMenu,
@@ -127,13 +129,13 @@ export default function InputBar({ onSubmit, disabled }: Props) {
             <box
                 width="100%"
                 border={["left"]}
-                borderColor="cyan"
+                borderColor={colors.primary}
                 customBorderChars={{
                     ...EmptyBorder,
                     vertical: "▌",
                     bottomLeft: "▌",
                 }}
-                backgroundColor="#1A1A24"
+                backgroundColor={colors.surface}
                 paddingX={2}
                 paddingY={1}
                 gap={1}
@@ -145,7 +147,7 @@ export default function InputBar({ onSubmit, disabled }: Props) {
                         bottom="100%"
                         left={0}
                         width="100%"
-                        backgroundColor="#1A1A24"
+                        backgroundColor={colors.surface}
                         zIndex={10}
                     >
                         <CommandMenu
