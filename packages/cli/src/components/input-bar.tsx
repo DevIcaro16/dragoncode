@@ -3,7 +3,7 @@ import { EmptyBorder } from "./border";
 import StatusBar from "./status-bar";
 import { CommandMenu } from "./command-menu";
 import React, { useCallback, useEffect } from "react";
-import { useRenderer } from "@opentui/react";
+import { useKeyboard, useRenderer } from "@opentui/react";
 import { resolve } from "bun";
 import useCommandMenu from "./command-menu/use-command-menu";
 import type { Command } from "./command-menu/types";
@@ -26,7 +26,7 @@ export const TEXTAREA_KEYS_BINDINGS: KeyBinding[] = [
 
 export default function InputBar({ onSubmit, disabled }: Props) {
 
-    const textareaRef = React.useRef<TextareaRenderable>(null);
+    const textareaRef = React.useRef<TextareaRenderable | null>(null);
     const onSubmitRef = React.useRef<() => void>(() => { });
     const renderer = useRenderer();
     const { isTopLayer, setResponder } = useKeyboardLayer();
@@ -43,6 +43,9 @@ export default function InputBar({ onSubmit, disabled }: Props) {
         resolveCommand,
         setSelectedIndex,
     } = useCommandMenu();
+
+    const selectedIndexRef = React.useRef(selectedIndex);
+    selectedIndexRef.current = selectedIndex;
 
     const handleCommandExecute = useCallback((index: number) => {
         const command = resolveCommand(index);
@@ -123,6 +126,19 @@ export default function InputBar({ onSubmit, disabled }: Props) {
         return () => setResponder("base", null);
 
     }, [disabled, setResponder]);
+
+    useKeyboard((key) => {
+        if (key.name !== "tab") return;
+
+        const command = resolveCommand(selectedIndex);
+        if (!command) return;
+
+        const textarea = textareaRef.current;
+        if (!textarea) return;
+
+        textarea.setText(`/${command.name}`);
+        textarea.gotoBufferEnd();
+    });
 
     return (
         <box width="100%" alignItems="center">
