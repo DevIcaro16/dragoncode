@@ -2,6 +2,7 @@ import { useCallback } from "react";
 import { useNavigate } from "react-router";
 import Header from "../components/Header";
 import InputBar from "../components/input-bar";
+import Spinner from "../components/spinner";
 
 export default function Home() {
 
@@ -18,6 +19,8 @@ export default function Home() {
             flexGrow={1}
             gap={2}
             position="relative"
+            width="100%"
+            height="100%"
         >
             <Header />
             <box width="100%" maxWidth={78} paddingX={2}>
@@ -26,4 +29,4 @@ export default function Home() {
         </box>
     );
 
-}
+};
