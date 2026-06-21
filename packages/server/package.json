@@ -1,0 +1,19 @@
+{
+  "name": "@dragoncode/server",
+  "module": "src/index.ts",
+  "dependencies": {
+    "@dragoncode/shared": "workspace:*",
+    "@dragoncode/database": "workspace:*",
+    "@hono/zod-validator": "^0.8.0",
+    "hono": "^4.12.25",
+    "zod": "^4.4.3"
+  },
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "private": true,
+  "scripts": {
+    "dev": "bun run --hot src/index.ts"
+  },
+  "type": "module"
+}
