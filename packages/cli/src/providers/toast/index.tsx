@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useContext, useRef, useState, type ReactNode } from "react";
+import React, { createContext, useCallback, useContext, useMemo, useRef, useState, type ReactNode } from "react";
 import { DEFAULT_DURATION, type ToastOptions, type ToastVariant } from "./types";
 import { useTerminalDimensions } from "@opentui/react";
 import { useTheme } from "../theme";
@@ -45,9 +45,7 @@ export default function ToastProvider({ children }: ToastProviderProps) {
 
     }, [clearCurrentTimeout]);
 
-    const value: ToastContextValue = {
-        show
-    };
+    const value = useMemo(() => ({ show }), [show]);
 
     return (
         <ToastContext.Provider value={value}>
