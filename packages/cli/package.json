@@ -7,15 +7,18 @@
     "dev": "bun run --watch src/index.tsx"
   },
   "devDependencies": {
-    "@types/bun": "latest",
+    "@dragoncode/server": "workspace:*",
     "@types/react": "^19.2.17"
   },
   "peerDependencies": {
     "typescript": "^5"
   },
   "dependencies": {
+    "@dragoncode/shared": "workspace:*",
     "@opentui/core": "^0.3.2",
     "@opentui/react": "^0.3.2",
-    "react": "^19.2.6"
+    "hono": "^4.12.25",
+    "react": "^19.2.6",
+    "zod": "^4.4.3"
   }
 }

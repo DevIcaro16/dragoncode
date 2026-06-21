@@ -1,0 +1,11 @@
+{
+  "name": "@dragoncode/shared",
+  "type": "module",
+  "private": true,
+  "export": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "zod": "^4.4.3"
+  }
+}

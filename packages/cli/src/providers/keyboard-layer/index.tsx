@@ -9,6 +9,7 @@ type KeyboardLayerContextValue = {
     pop: (id: string) => void;
     isTopLayer: (id: string) => boolean;
     setResponder: (id: string, responder: Responder | null) => void;
+    setFallback: (responder: Responder | null) => void;
 };
 
 const KeyboardLayerContext = createContext<KeyboardLayerContextValue | null>(null);
@@ -20,6 +21,7 @@ export default function KeyboardLayerProvider({ children }: { children: React.Re
     stackRef.current = stack;
 
     const responders = useRef<Map<string, Responder>>(new Map());
+    const fallback = useRef<Responder | null>(null);
     const renderer = useRenderer();
 
     const push = useCallback((id: string, responder?: Responder) => {
@@ -55,6 +57,10 @@ export default function KeyboardLayerProvider({ children }: { children: React.Re
 
     }, []);
 
+    const setFallback = useCallback((responder: Responder | null) => {
+        fallback.current = responder;
+    }, []);
+
 
     useKeyboard((key) => {
 
@@ -68,13 +74,15 @@ export default function KeyboardLayerProvider({ children }: { children: React.Re
             if (responder && responder()) return;
         }
 
+        if (fallback.current && fallback.current()) return;
+
         renderer.destroy();
 
     });
 
     return (
         <KeyboardLayerContext.Provider
-            value={{ push, pop, isTopLayer, setResponder }}
+            value={{ push, pop, isTopLayer, setResponder, setFallback }}
         >
             {children}
         </KeyboardLayerContext.Provider>
