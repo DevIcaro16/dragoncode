@@ -2,7 +2,7 @@ import z from "zod";
 import { findSupportedChatModel } from "@dragoncode/shared/src/models";
 import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
-import { db } from "@dragoncode/database";
+import { db } from "@dragoncode/database/client";
 import { Role, Mode, MessageStatus } from "@dragoncode/database/enums";
 
 
